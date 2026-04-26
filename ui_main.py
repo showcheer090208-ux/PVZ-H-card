@@ -117,6 +117,18 @@ class MainWindow(QMainWindow):
             self.model.guid = guid
             self.tab_basic.update_ui(self.model)
             
+            # 调试输出
+            #print(f"导入后 model.guid = {self.model.guid}")
+            #print(f"Basic页显示的GUID = {self.tab_basic.guid_spin.value()}")
+            
+            # 强制同步
+            if self.model.guid != guid:
+                print(f"GUID 不匹配！强制修正 {self.model.guid} -> {guid}")
+                self.model.guid = guid
+                self.tab_basic.update_ui(self.model)
+                        # 【关键修复】强制刷新 JSON 预览
+            self.update_json_preview()
+            
             QMessageBox.information(self, "成功", f"卡牌 {guid_str} 已成功导入工作台！")
         except Exception as e:
             QMessageBox.critical(self, "导入失败", f"解析异常: {e}")
@@ -177,17 +189,14 @@ class MainWindow(QMainWindow):
         self.splitter.addWidget(self.stacked_widget)
         
         # ================= 页面注册 =================
-        self.tab_project = TabProject(self.pm) # 【新增】大厅页
-        self.tab_project.edit_card_requested.connect(self.load_card_to_workbench) # 绑定双击事件
+        self.tab_project = TabProject(self.pm)
+        self.tab_project.edit_card_requested.connect(self.load_card_to_workbench)
         
         self.tab_basic = TabBasic(self.model)
-        # ================= 接住 Basic 页的新信号 =================
-        # 1. 接住保存信号
-        self.tab_basic.save_requested.connect(self.sync_data_to_model)
-        
-        # 2. 接住导入信号
+        # ================= 修改点：绑定到独立的保存方法 =================
+        self.tab_basic.save_requested.connect(self.save_card_to_project) 
         self.tab_basic.import_requested.connect(self.handle_external_import)
-        # =========================================================
+        
         self.tab_subtypes = TabSubtypes()
         self.tab_tags = TabTags()
         self.tab_abilities = TabAbilities()
@@ -237,8 +246,8 @@ class MainWindow(QMainWindow):
                         self.tab_abilities, self.tab_logic]
         for tab in tabs_with_data:
             if hasattr(tab, "data_changed"):
-                tab.data_changed.connect(self.sync_data_to_model)
-
+                tab.data_changed.connect(self.sync_ui_to_model_only)
+                
         # ================== 【核心】为所有数据面板挂载加速 ==================
         from PySide6.QtWidgets import QScrollArea
         
@@ -266,7 +275,8 @@ class MainWindow(QMainWindow):
     def _setup_shortcuts(self):
         from PySide6.QtGui import QShortcut, QKeySequence
         save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
-        save_shortcut.activated.connect(self.sync_data_to_model)
+        # ================= 修改点：快捷键绑定到独立保存方法 =================
+        save_shortcut.activated.connect(self.save_card_to_project)
         
         export_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
         export_shortcut.activated.connect(self.quick_export)
@@ -308,9 +318,9 @@ class MainWindow(QMainWindow):
                 self.settings.setValue("splitterSizes_v3", self.splitter.saveState())
         super().closeEvent(event)
 
-    def sync_data_to_model(self):
-        """Ctrl+S 的新逻辑：不仅同步 UI，还要保存到工程"""
-        if getattr(self, '_is_syncing', False):
+    def sync_ui_to_model_only(self):
+        """只负责同步 UI 数据并刷新 JSON 预览，绝不自动落盘保存"""
+        if getattr(self, '_is_syncing', False): 
             return
         self._is_syncing = True
         try:
@@ -320,27 +330,19 @@ class MainWindow(QMainWindow):
                     widget.sync_to_model(self.model)
             
             self.update_json_preview()
-            
-            # 【核心修改】将修改后的单卡模型，扔进工程大厅保存落盘
-            if self.pm.current_project_name:
-                self.pm.add_or_update_card(self.model)
-                self.tab_project.refresh_card_roster() # 刷新大厅列表
-                
-                # 在窗口标题上给个反馈
-                self.setWindowTitle(f"PvZ Heroes 幻影引擎 v2.0 - [已保存至 {self.pm.current_project_name}]")
         finally:
             self._is_syncing = False
 
     def load_card_to_workbench(self, card_data_dict):
-        """【新增】从大厅双击卡牌，或者新建卡牌，加载进工作台"""
+        """从大厅双击卡牌，或者新建卡牌，加载进工作台"""
         if not card_data_dict:
-            # 传的是空字典，说明是要新建卡牌
             self.model = CardModel()
         else:
-            # 传的是工程里保存的字典，解析它
             self.model = CardModel.from_json(card_data_dict)
             
-        # 刷新所有 UI
+        # 【记录初始GUID】用于检测后续保存时是否发生了修改
+        self._original_guid = self.model.guid
+            
         try:
             for i in range(self.stacked_widget.count()):
                 widget = self.stacked_widget.widget(i)
@@ -349,8 +351,30 @@ class MainWindow(QMainWindow):
         finally:
             self.update_json_preview()
             
-        # 自动跳转到“基础属性”页
         self.sidebar.setCurrentRow(1)
+        
+    def save_card_to_project(self):
+        """只有在点击保存按钮或 Ctrl+S 时才触发真正的落盘"""
+        # 1. 先确保内存里的数据是最新的
+        self.sync_ui_to_model_only()
+        
+        # 2. 将修改后的单卡模型保存至工程
+        if self.pm.current_project_name:
+            new_guid = self.model.guid
+            old_guid = getattr(self, '_original_guid', None)
+            
+            # 【清理幽灵数据】如果发现 GUID 变了，说明用户修改了它，删掉工程里的旧数据
+            if old_guid and old_guid != new_guid:
+                if hasattr(self.pm, 'delete_card'):
+                    self.pm.delete_card(old_guid)
+            
+            # 更新追踪标记
+            self._original_guid = new_guid
+            
+            self.pm.add_or_update_card(self.model)
+            self.tab_project.refresh_card_roster() # 刷新大厅列表
+            
+            self.setWindowTitle(f"PvZ Heroes 幻影引擎 v2.0 - [已保存至 {self.pm.current_project_name}]")
 
     def update_json_preview(self):
         """更新JSON预览区 (使用HTML高亮注入)"""

@@ -372,6 +372,8 @@ ENUM_NAMES = {
     # 阵营选择
     "Plants": "植物阵营",
     "Zombies": "僵尸阵营",
+    "PvZCards.Engine.Components.Plants, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "植物阵营",
+    "PvZCards.Engine.Components.Zombies, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "僵尸阵营",
 
     # 地形类型
     "GrassTerrain": "草地",

@@ -261,7 +261,10 @@ class CardModel:
             cdata = comp.get("$data", {})
             comp_name = parse_type_str(ctype)
 
-            if comp_name == "Attack":
+            # 【修复点】解析 Card 组件，获取正确的 GUID
+            if comp_name == "Card":
+                instance.guid = cdata.get("Guid", instance.guid)
+            elif comp_name == "Attack":
                 instance.has_attack = True
                 instance.attack = safe_get(cdata, "AttackValue", "BaseValue", default=1)
             elif comp_name == "Health":
@@ -296,10 +299,8 @@ class CardModel:
                 if ability_key not in ["SplashDamage", "Armor", "Untrickable", "Teamup"]:
                     instance.components_abilities[ability_key] = True
             elif comp_name == "GrantedTriggeredAbilities":
-                # 【核心修改点】直接将整个数组读入模型
                 instance.triggered_abilities = cdata.get("a", [])
 
-        # 【智能反推】如果是导入的是原版的场景能力数据，将UI挂载点修改回我们的虚拟基类
         if instance.is_board_ability and instance.base_id == "BasePlantOneTimeEffect" and data.get("set") == "Board":
             instance.base_id = "BoardAbility"
 

@@ -47,7 +47,7 @@ NODE_DEF = {
         "category": "Trigger"
     },
     "DrawCardFromSubsetTrigger": {
-        "type": "PvZCards.Engine.Components.DrawCardFromSubsetTrigger, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.DrawCardFromSubsetTrigger",
         "default_data": {},
         "category": "Trigger"
     },
@@ -130,7 +130,7 @@ NODE_DEF = {
         "allowed_children": ["CompositeQuery", "Query"]
     },
     "QueryEntityCondition": {
-        "type": "PvZCards.Engine.Components.QueryEntityCondition, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.QueryEntityCondition",
         "default_data": {
             "ConditionEvaluationType": "All"
         },
@@ -140,7 +140,7 @@ NODE_DEF = {
         "category": "Filter"
     },
     "SelfEntityFilter": {
-        "type": "PvZCards.Engine.Components.SelfEntityFilter, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.SelfEntityFilter",
         "default_data": {},
         "child_prop": "Query",
         "is_list": False,
@@ -148,7 +148,7 @@ NODE_DEF = {
         "allowed_children": ["CompositeQuery", "Query"]
     },
     "PlayerInfoCondition": {
-        "type": "PvZCards.Engine.Components.PlayerInfoCondition, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.PlayerInfoCondition",
         "default_data": {
             "Faction": "Plants"
         },
@@ -189,7 +189,7 @@ NODE_DEF = {
         "allowed_children": ["CompositeQuery", "Query", "AdditionalTargetQuery"]
     },
     "SecondaryTargetFilter": {
-        "type": "PvZCards.Engine.Components.SecondaryTargetFilter, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.SecondaryTargetFilter",
         "default_data": {
             "SelectionType": "All",
             "NumTargets": 0,
@@ -227,7 +227,7 @@ NODE_DEF = {
         "category": "Condition"
     },
     "PersistsAfterTransform": {
-        "type": "PvZCards.Engine.Components.PersistsAfterTransform, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.PersistsAfterTransform",
         "default_data": {},
         "category": "Condition"
     },
@@ -250,7 +250,7 @@ NODE_DEF = {
         "allowed_children": ["CompositeQuery", "Query"]
     },
     "NotQuery": {
-        "type": "PvZCards.Engine.Queries.NotQuery, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Queries.NotQuery",
         "default_data": {},
         "child_prop": "Query",
         "is_list": False,
@@ -437,7 +437,7 @@ NODE_DEF = {
         "category": "Query"
     },
     "QueryMultiplier": {
-        "type": "PvZCards.Engine.Components.QueryMultiplier, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.QueryMultiplier",
         "default_data": {
             "Divider": 1
         },
@@ -491,7 +491,7 @@ NODE_DEF = {
         "category": "Query"
     },
     "HealthComparisonQuery": {
-        "type": "PvZCards.Engine.Queries.HealthComparisonQuery, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Queries.HealthComparisonQuery",
         "default_data": {
             "ComparisonOperator": "LessOrEqual",
             "HealthValue": 1
@@ -557,7 +557,7 @@ NODE_DEF = {
     "OnTerrainQuery": {
         "type": "PvZCards.Engine.Queries.OnTerrainQuery",
         "default_data": {
-            "TerrainType": "PvZCards.Engine.Components.GrassTerrain, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            "TerrainType": "PvZCards.Engine.Components.GrassTerrain"
         },
         "editable_params": {"TerrainType": {"type": "terrain_picker"}},
         "category": "Query"
@@ -565,11 +565,11 @@ NODE_DEF = {
     "OpenLaneQuery": {
         "type": "PvZCards.Engine.Queries.OpenLaneQuery",
         "default_data": {
-            "PlayerFactionType": "PvZCards.Engine.Components.Plants, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "PlayerFactionType": "PvZCards.Engine.Components.Plants",
             "IsForTeamupCard": False
         },
         "editable_params": {
-            "PlayerFactionType": {"type": "enum", "options": ["Plants", "Zombies"]},
+            "PlayerFactionType": {"type": "enum", "options": ["PvZCards.Engine.Components.Plants, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "PvZCards.Engine.Components.Zombies, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"]},
             "IsForTeamupCard": {"type": "bool"}
         },
         "category": "Query"
@@ -645,12 +645,12 @@ NODE_DEF = {
         "category": "Effect"
     },
     "MixedUpGravediggerEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.MixedUpGravediggerEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.MixedUpGravediggerEffectDescriptor",
         "default_data": {},
         "category": "Effect"
     },
     "MoveCardToLanesEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.MoveCardToLanesEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.MoveCardToLanesEffectDescriptor",
         "default_data": {},
         "category": "Effect"
     },
@@ -665,14 +665,14 @@ NODE_DEF = {
         "category": "Effect"
     },
     "TurnIntoGravestoneEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.TurnIntoGravestoneEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.TurnIntoGravestoneEffectDescriptor",
         "default_data": {},
         "category": "Effect"
     },
 
     # ---------- 有参数（基础类型）----------
     "AttackInLaneEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.AttackInLaneEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.AttackInLaneEffectDescriptor",
         "default_data": {
             "DamageAmount": 4
         },
@@ -692,7 +692,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "ChargeBlockMeterEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.ChargeBlockMeterEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.ChargeBlockMeterEffectDescriptor",
         "default_data": {
             "ChargeAmount": 10
         },
@@ -702,7 +702,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "CopyCardEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.CopyCardEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.CopyCardEffectDescriptor",
         "default_data": {
             "GrantTeamup": False,
             "ForceFaceDown": False,
@@ -747,7 +747,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "EffectValueDescriptor": {
-        "type": "PvZCards.Engine.Components.EffectValueDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.EffectValueDescriptor",
         "default_data": {
             "MappingType": "DamageToHeal"
         },
@@ -796,7 +796,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "GrantTriggeredAbilityEffectDescriptor": {
-        "type": "PvZCards.Engine.Effects.GrantTriggeredAbilityEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Effects.GrantTriggeredAbilityEffectDescriptor",
         "default_data": {
             "AbilityGuid": 562,
             "AbilityValueType": "None",
@@ -816,7 +816,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "HeroHealthMultiplier": {
-        "type": "PvZCards.Engine.Components.HeroHealthMultiplier, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.HeroHealthMultiplier",
         "default_data": {
             "Faction": "Plants",
             "Divider": 1
@@ -853,7 +853,7 @@ NODE_DEF = {
         "category": "Effect"
     },
     "SunGainedMultiplier": {
-        "type": "PvZCards.Engine.Components.SunGainedMultiplier, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.SunGainedMultiplier",
         "default_data": {
             "Faction": "Plants",
             "Divider": 1
@@ -879,7 +879,7 @@ NODE_DEF = {
 
     # ---------- 有子节点 ----------
     "CreateCardFromSubsetEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.CreateCardFromSubsetEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.CreateCardFromSubsetEffectDescriptor",
         "default_data": {
             "ForceFaceDown": False
         },
@@ -892,7 +892,7 @@ NODE_DEF = {
         "allowed_children": ["CompositeQuery", "Query"]
     },
     "TransformIntoCardFromSubsetEffectDescriptor": {
-        "type": "PvZCards.Engine.Components.TransformIntoCardFromSubsetEffectDescriptor, EngineLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "type": "PvZCards.Engine.Components.TransformIntoCardFromSubsetEffectDescriptor",
         "default_data": {},
         "child_prop": "SubsetQuery",
         "is_list": False,
